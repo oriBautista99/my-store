@@ -1,5 +1,7 @@
-<app-img [img]="product.image"></app-img>
+<app-img *ngIf="product.images.length > 0" [img]="product.images[0]"></app-img>
 <h2>{{product.price | currency:'$'}}</h2>
-<p>{{product.title | reverse}}</p>
+<p>{{product.title}}</p>
+<p>{{product?.taxes | currency:'$'}}</p>
 <p appHighlight>{{product.description}}</p>
+<button (click)="showDetail()">Detail</button>
 <button (click)="addToCart()">Add cart</button>
