@@ -10,20 +10,31 @@ export class ProductComponent implements OnInit {
 
   @Input() product:Product = {
     id: '',
-    image: '',
+    images: [],
     price: 0,
     title: '',
     description: '',
-    category: ''
+    taxes: 0,
+    category: {
+      id:'',
+      name: ''
+    }
   };
   @Output() addedProduct = new EventEmitter<Product>();
+  @Output() showProduct  = new EventEmitter<string>();
 
   constructor() { }
 
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {
+
   }
 
   addToCart(){
     this.addedProduct.emit(this.product)
+  }
+
+  showDetail(){
+    this.showProduct.emit(this.product.id)
   }
 }
