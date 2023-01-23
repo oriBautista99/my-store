@@ -28,7 +28,7 @@ export class ProductsComponent implements OnInit {
     }
   }
   limit = 10;
-  offset = 0;
+  offset = 1;
   statusDetail : 'loading' |  'success' | 'error' | 'init' = 'init';
 
   constructor(
@@ -39,7 +39,10 @@ export class ProductsComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.getProducts();
+    this.productSvc.getAllProducts(10, 1).subscribe((data) => {
+      this.products = data;
+      this.offset += this.limit;
+    });
   }
 
   onAddToShoppingCart(product: Product){
@@ -47,12 +50,10 @@ export class ProductsComponent implements OnInit {
     this.total = this.stroreSvc.getTotal();
   }
 
-  getProducts(){
-    this.productSvc.getAllProducts(this.limit,this.offset).subscribe(res => {
-      if(res){
-        this.products = this.products.concat(res);
-        this.offset += this.limit;
-      }
+  loadMore() {
+    this.productSvc.getAllProducts(this.limit, this.offset).subscribe((data) => {
+      this.products = this.products.concat(data);
+      this.offset += this.limit;
     });
   }
 
