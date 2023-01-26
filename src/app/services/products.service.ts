@@ -11,11 +11,20 @@ import { checkTime } from '../interceptors/time.interceptor';
 })
 export class ProductsService {
 
-  private apiUrl = 'https://young-sands-07814.herokuapp.com/api/products';
+  private apiUrl = 'https://young-sands-07814.herokuapp.com/api';
 
   constructor(
     private httpSvc: HttpClient
   ) { }
+
+  getByCategory(idCategory: string, limit: number, offset: number){
+    let params = new HttpParams();
+    if(limit && offset){
+      params = params.set('limit',limit);
+      params = params.set('offset',offset);
+    }
+    return this.httpSvc.get<Product[]>(`${this.apiUrl}/categories/${idCategory}/products`,{params})
+  }
 
   getAllProducts(limit?:number, offset?:number): Observable<any>{
     let params = new HttpParams();
@@ -23,7 +32,7 @@ export class ProductsService {
       params = params.set('limit',limit);
       params = params.set('offset',offset);
     }
-    return this.httpSvc.get<Product[]>(this.apiUrl,{params, context: checkTime()})
+    return this.httpSvc.get<Product[]>(this.apiUrl+'/products',{params, context: checkTime()})
     .pipe(
       retry(3),
       map( products => products.map(item => {
@@ -36,7 +45,7 @@ export class ProductsService {
   }
 
   getProduct(id: string){
-    return this.httpSvc.get<Product>(`${this.apiUrl}/${id}`)
+    return this.httpSvc.get<Product>(`${this.apiUrl}/products/${id}`)
       .pipe(
         catchError((error:HttpErrorResponse) => {
           if(error.status === HttpStatusCode.Conflict){
@@ -54,14 +63,14 @@ export class ProductsService {
   }
 
   create(product: CreateProductDTO){
-    return this.httpSvc.post<Product>(this.apiUrl,product);
+    return this.httpSvc.post<Product>(this.apiUrl+'/products',product);
   }
 
   update(id:string, product: UpdateProductDTO){
-    return this.httpSvc.put<Product>(`${this.apiUrl}/${id}`,product);
+    return this.httpSvc.put<Product>(`${this.apiUrl}/products/${id}`,product);
   }
 
   delete(id: string){
-    return this.httpSvc.delete<boolean>(`${this.apiUrl}/${id}`);
+    return this.httpSvc.delete<boolean>(`${this.apiUrl}/products/${id}`);
   }
 }
