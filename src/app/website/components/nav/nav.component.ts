@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Category } from 'src/app/models/product.mode';
 import { User } from 'src/app/models/user.model';
@@ -19,13 +20,17 @@ export class NavComponent implements OnInit {
 
   constructor(private storeSvc: StoreService,
     private authService: AuthService,
-    private categorySvc: CategoriesService) { }
+    private categorySvc: CategoriesService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.storeSvc.myCart$.subscribe(products => {
       this.counter = products.length;
     });
     this.getAllCategories();
+    this.authService.user$.subscribe( data => {
+      this.profile = data;
+    })
   }
 
   toggleMenu() {
@@ -33,9 +38,9 @@ export class NavComponent implements OnInit {
   }
 
   login() {
-    this.authService.loginAndGet('sebas@mail.com', '1212')
+    this.authService.loginAndGet('admin@mail.com', 'admin123')
     .subscribe(user => {
-      this.profile = user;
+      this.router.navigate(['/profile']);
     });
   }
 
@@ -43,6 +48,12 @@ export class NavComponent implements OnInit {
     this.categorySvc.getAll().subscribe( data => {
       this.categories = data;
     })
+  }
+
+  logout(){
+    this.authService.logout();
+    this.profile = null;
+    this.router.navigate(['/home']);
   }
 
 }

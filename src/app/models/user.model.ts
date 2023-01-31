@@ -2,7 +2,8 @@ export interface User{
   id:string;
   email: string;
   password:string;
-  name:string
+  name:string;
+  role: 'customer' | 'admin';
 }
 
 export interface userCreateDTO extends Omit<User,'id'>{}

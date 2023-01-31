@@ -1,3 +1,4 @@
+import { AuthGuard } from './../guards/auth.guard';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './components/layout/layout.component';
@@ -9,6 +10,7 @@ import { ProductDetailComponent } from './pages/product-detail/product-detail.co
 import { ProfileComponent } from './pages/profile/profile.component';
 import { RecoveryComponent } from './pages/recovery/recovery.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { ExitGuard } from '../guards/exit.guard';
 
 const routes: Routes = [
   {
@@ -24,7 +26,11 @@ const routes: Routes = [
         path:'home', component: HomeComponent
       },
       {
-        path:'category/:idCategory', component: CategoryComponent
+        path:'category',
+        loadChildren: () => import('./pages/category/category.module').then(m => m.CategoryModule),
+        data: {
+          preload:true
+        }
       },
       {
         path:'product/:idProduct', component: ProductDetailComponent
@@ -36,13 +42,17 @@ const routes: Routes = [
         path:'login', component: LoginComponent
       },
       {
-        path:'profile', component: ProfileComponent
+        path:'profile',
+        component: ProfileComponent,
+        canActivate: [AuthGuard]
       },
       {
         path:'recovery', component: RecoveryComponent
       },
       {
-        path:'register', component: RegisterComponent
+        path:'register',
+        canDeactivate: [ExitGuard],
+        component: RegisterComponent
       }
     ]
   }
