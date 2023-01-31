@@ -1,5 +1,6 @@
+import { TokenService } from './services/token.service';
 import { UsersService } from './services/users.service';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Product } from './models/product.mode';
 import { AuthService } from './services/auth.service';
 import { FilesService } from './services/files.service';
@@ -9,7 +10,7 @@ import { FilesService } from './services/files.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
 
   imgValue = '';
   token:string = '';
@@ -17,7 +18,15 @@ export class AppComponent {
 
   constructor(private usersService: UsersService,
     private authSvc: AuthService,
-    private fileSvc:FilesService){}
+    private fileSvc:FilesService,
+    private tokenSvc: TokenService){}
+
+  ngOnInit(): void {
+      const token = this.tokenSvc.getToken();
+      if(token){
+        this.authSvc.profile().subscribe()
+      }
+  }
 
   onLoaded(img:string){
     console.log('padre')
@@ -27,7 +36,8 @@ export class AppComponent {
     this.usersService.create({
       name: 'Sebas',
       email: 'sebas@mail.com',
-      password: '1212'
+      password: '1212',
+      role: 'customer'
     })
     .subscribe(rta => {
       console.log(rta);
