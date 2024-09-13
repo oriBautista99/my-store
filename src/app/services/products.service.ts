@@ -5,25 +5,26 @@ import { CreateProductDTO, Product, UpdateProductDTO } from '../models/product.m
 import {catchError, map, retry} from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { checkTime } from '../interceptors/time.interceptor';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductsService {
 
-  private apiUrl = 'https://young-sands-07814.herokuapp.com/api';
+  private apiUrl = environment.URL_API+'products';
 
   constructor(
     private httpSvc: HttpClient
   ) { }
 
-  getByCategory(idCategory: string, limit: number, offset: number){
+  getByCategory(category: string, limit: number, offset: number){
     let params = new HttpParams();
     if(limit && offset){
       params = params.set('limit',limit);
       params = params.set('offset',offset);
     }
-    return this.httpSvc.get<Product[]>(`${this.apiUrl}/categories/${idCategory}/products`,{params})
+    return this.httpSvc.get<Product[]>(`${this.apiUrl}/category/${category}`,{params})
   }
 
   getAllProducts(limit?:number, offset?:number): Observable<any>{
@@ -32,7 +33,7 @@ export class ProductsService {
       params = params.set('limit',limit);
       params = params.set('offset',offset);
     }
-    return this.httpSvc.get<Product[]>(this.apiUrl+'/products',{params, context: checkTime()})
+    return this.httpSvc.get<Product[]>(this.apiUrl,{params, context: checkTime()})
     .pipe(
       retry(3),
       map( products => products.map(item => {
@@ -45,7 +46,7 @@ export class ProductsService {
   }
 
   getProduct(id: string){
-    return this.httpSvc.get<Product>(`${this.apiUrl}/products/${id}`)
+    return this.httpSvc.get<Product>(`${this.apiUrl}/${id}`)
       .pipe(
         catchError((error:HttpErrorResponse) => {
           if(error.status === HttpStatusCode.Conflict){

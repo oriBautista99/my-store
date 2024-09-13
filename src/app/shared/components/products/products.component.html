@@ -11,13 +11,14 @@
   <div *ngIf="productChosen">
     <button (click)="toggleProductDetail()" >Close</button>
     <h1>{{productChosen.title}}</h1>
-    <swiper
+    <img [src]="productChosen.image" alt="">
+    <!-- <swiper
       [slidesPerView]="1"
     >
       <ng-template swiperSlide *ngFor="let img of productChosen.images">
         <img [src]="img" alt="">
       </ng-template>
-    </swiper>
+    </swiper> -->
     <p>{{productChosen.description}}</p>
     <button (click)="editProduct()">Edit</button>
     <button (click)="deleteProduct()">Delete</button>

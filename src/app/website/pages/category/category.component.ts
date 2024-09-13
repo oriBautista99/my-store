@@ -29,7 +29,7 @@ export class CategoryComponent implements OnInit {
     this.route.paramMap
     .pipe(
       switchMap(params => {
-        this.categoryId = params.get('idCategory');
+        this.categoryId = params.get('category');
         if(this.categoryId){
           return this.productSvc.getByCategory(this.categoryId, this.limit, this.offset)
         }

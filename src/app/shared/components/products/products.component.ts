@@ -25,13 +25,14 @@ export class ProductsComponent {
   showProductDetail = false;
   productChosen: Product = {
     id: '',
-    images: [],
+    image: '',
     price: 0,
     title: '',
     description: '',
-    category: {
-      id:'',
-      name: ''
+    category: '',
+    rating: {
+      count: 0,
+      rate: 0
     }
   }
   limit = 10;
@@ -101,7 +102,11 @@ export class ProductsComponent {
       description: 'descripcion',
       price: 200,
       categoryId: 2,
-      images: []
+      image: '',
+      rating: {
+        count: 0,
+        rate: 0
+      }
     }
     this.productSvc.create(product).subscribe( res => {
       this.products.unshift(res);

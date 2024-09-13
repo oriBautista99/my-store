@@ -3,14 +3,20 @@ export interface Category {
   name: string;
 }
 
+export interface Rating {
+  rate: number,
+  count: number
+}
+
 export interface Product{
   id: string;
   title: string;
   price: number;
-  images: string[];
+  image: string;
   description: string;
-  category: Category;
+  category: string;
   taxes ?: number;
+  rating: Rating
 }
 
 export interface CreateProductDTO extends Omit<Product, 'id' | 'category'>{

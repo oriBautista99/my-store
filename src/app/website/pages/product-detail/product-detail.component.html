@@ -2,11 +2,12 @@
   <button (click)="goToBack()" >Back</button>
   <div *ngIf="product" class="detail">
     <div class="gallery">
-      <swiper [slidesPerView]="1">
+      <img [src]="product.image" [alt]="product.title">
+      <!-- <swiper [slidesPerView]="1">
         <ng-template swiperSlide *ngFor="let img of product?.images" >
           <img [src]="img" alt="img">
         </ng-template>
-      </swiper>
+      </swiper> -->
     </div>
     <div>
       <h1>{{product?.title}}</h1>

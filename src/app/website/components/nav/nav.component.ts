@@ -47,7 +47,7 @@ export class NavComponent implements OnInit {
   getAllCategories(){
     this.categorySvc.getAll().subscribe( data => {
       this.categories = data;
-    })
+    });
   }
 
   logout(){
